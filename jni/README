@@ -1,0 +1,30 @@
+# 1. doxygen 사용
+vim 사용시 syntax 활성화하는 명령은 let g:load_doxygen_syntax=1
+
+
+# 2. 컴파일 방법
+# 2.1. 일반 환경
+./configure
+cd test/unittest
+cmake .
+make clean; make; make test
+
+# 2.2. osx 환경
+./configure
+cd test/unittest
+cmake -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -stdlib=libc++" .
+make clean; make; make test
+
+# 2.3. arm 용으로 컴파일 시
+./configure --with-armneon=true --host=arm-linux-androideabi
+cd test/unittest
+cmake -DCMAKE_TOOLCHAIN_FILE=toolchain.arm.cmake .
+make clean; make; make test
+
+
+# 3. arm 테스트
+# 3.1. 루팅, chroot 이용하여 ubuntu 설치
+
+# 3.2. adb 이용
+adb push runTests /data/local/tmp/
+adb shell "/data/local/tmp/runTests"

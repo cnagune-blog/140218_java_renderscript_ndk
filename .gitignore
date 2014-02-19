@@ -1,0 +1,33 @@
+# APK files
+*.apk
+*.ap_
+
+# DEX files
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+
+# Local configuration file
+local.properties
+
+# Eclipse
+.classpath
+.project
+.factorypath
+.project.properties
+
+# Intellij
+.idea/
+*.iml
+*.iws
+out/
+
+# vim
+.*.swp
+.*.swo
+

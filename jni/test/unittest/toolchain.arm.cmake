@@ -1,0 +1,7 @@
+set(CMAKE_C_COMPILER    arm-linux-androideabi-gcc)
+set(CMAKE_CXX_COMPILER  arm-linux-androideabi-g++)
+set(CMAKE_LINKER        arm-linux-androideabi-ld)
+set(CMAKE_NM            arm-linux-androideabi-nm)
+set(CMAKE_OBJCOPY       arm-linux-androideabi-objcopy)
+set(CMAKE_OBJDUMP       arm-linux-androideabi-objdump)
+set(CMAKE_RANLIB        arm-linux-androideabi-ranlib)

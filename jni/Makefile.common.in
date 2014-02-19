@@ -1,0 +1,58 @@
+###########################################################
+# Directories
+###########################################################
+BUILD_DIR=@abs_builddir@
+OUTPUT_DIR=$(BUILD_DIR)/build
+INSTALL_DIR=@prefix@
+
+CC=@CC@
+CXX=@CXX@
+DBG=@DBG@
+AR=ar
+GCOVFLAG=@GCOVFLAG@
+ARMNEON=@ARMNEON@
+
+
+###########################################################
+# Debug
+###########################################################
+ifeq ($(DBG),yes)
+    OPTIMIZE_FLAG=-g -D_DEBUG
+else    
+    OPTIMIZE_FLAG=-g -O3
+endif   
+
+
+###########################################################
+# Compile options
+###########################################################
+LDSO=$(CXX) -shared -rdynamic -fPIC
+#CXXFLAGS=-fPIC -Wall -Wno-unused-result $(OPTIMIZE_FLAG)
+CXXFLAGS=-fPIC -Wall $(OPTIMIZE_FLAG)
+ifeq ($(GCOVFLAG),yes)
+    CXXFLAGS += -fprofile-arcs -ftest-coverage
+endif   
+
+
+###########################################################
+# Arm Neon
+###########################################################
+ifeq ($(ARMNEON),yes)
+    CXXFLAGS += -mfloat-abi=softfp -mfpu=neon
+endif   
+
+
+###########################################################
+# Includes
+###########################################################
+LOCAL_INCLUDES=
+INCLUDES=$(LOCAL_INCLUDES) \
+         -I$(BUILD_DIR)/include
+
+
+###########################################################
+# Libraries
+###########################################################
+LOCAL_LIBS=
+LDFLAGS=$(LOCAL_LIBS)
+
