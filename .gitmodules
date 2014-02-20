@@ -1,0 +1,3 @@
+[submodule "jni/test/unittest/externals"]
+	path = jni/test/unittest/externals
+	url = git@github.com:cnagune-blog/externals.git
