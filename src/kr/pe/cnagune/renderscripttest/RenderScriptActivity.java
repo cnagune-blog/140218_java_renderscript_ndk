@@ -28,7 +28,7 @@ public class RenderScriptActivity extends Activity
 	private static final String TAG = "RenderScriptActivity";
 	private static final int ScaleImageViewWidth     = 320;
 	private static final int ScaleImageViewHeight    = 240;
-	private static final int LoopTime = 5;
+	private static final int LoopTime = 1;
 
 	private ImageView image;
 	private TextView result;
@@ -75,6 +75,8 @@ public class RenderScriptActivity extends Activity
 				    calc.run(bitmapIn);
 			    }
 
+			    Log.d(TAG, "calc --------------------------------------------");
+
 			    // 3. calcList 목록에 있는 테스트 본격 수행
 			    Map<String, Long> sumMap = new LinkedHashMap<String, Long>();
 			    for (int i = 0; i < LoopTime; i++) {
@@ -109,8 +111,6 @@ public class RenderScriptActivity extends Activity
 		    }
 	    }).start();
     }
-
-
 }
 
 
