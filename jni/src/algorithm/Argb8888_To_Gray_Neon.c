@@ -19,7 +19,7 @@
  * @param out_pixels 결과 이미지를 저장할 배열
  * @param size 계산하고자 하는 픽셀 길이 (메모리는 4배)
  */
-void argb8888_to_gray_neon(void *in_pixels, void *out_pixels, int size)
+void argb8888_to_gray_neon(const void *in_pixels, void *out_pixels, int size)
 {
     uint8x8_t rfac = vdup_n_u8(76);
     uint8x8_t gfac = vdup_n_u8(151);
@@ -27,10 +27,8 @@ void argb8888_to_gray_neon(void *in_pixels, void *out_pixels, int size)
     int n = size / 8;
     int m = size % 8;
 
-    int iTemp;
-    unsigned char szTemp[8];
-    unsigned int *data_in  = (unsigned int *)in_pixels;
-    unsigned int *data_out = (unsigned int *)out_pixels;
+    const unsigned int *data_in  = (const unsigned int *)in_pixels;
+    unsigned char *data_out = (unsigned char *)out_pixels;
 
     // 한 루프당 8픽셀씩 변환 (32 bytes)
     while (n--) {
@@ -43,16 +41,10 @@ void argb8888_to_gray_neon(void *in_pixels, void *out_pixels, int size)
         temp = vmlal_u8(temp, rgb.val[2], rfac);
 
         result = vshrn_n_u16 (temp, 8);
-        vst1_u8(szTemp, result);
+        vst1_u8(data_out, result);
 
-        iTemp = szTemp[0]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[1]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[2]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[3]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[4]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[5]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[6]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[7]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
+        data_in += 8;
+        data_out += 8;
     }
 
     if (m) {

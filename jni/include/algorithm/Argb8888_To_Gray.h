@@ -14,7 +14,7 @@ extern "C" {
 
 
 /// Grayscale 변환 함수 - 일반 명령어
-void argb8888_to_gray(void *in_pixels, void *out_pixels, int size);
+void argb8888_to_gray(const void *in_pixels, void *out_pixels, int size);
 
 
 #ifdef __cplusplus 

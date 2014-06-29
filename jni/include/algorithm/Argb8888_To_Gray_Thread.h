@@ -14,7 +14,7 @@ extern "C" {
 
 
 /// Grayscale 변환 함수 - 일반 명령어와 Thread 사용
-void argb8888_to_gray_thread(void *in_pixels, void *out_pixels, int size, int thread_num);
+void argb8888_to_gray_thread(const void *in_pixels, void *out_pixels, int size, int thread_num);
 
 
 #ifdef __cplusplus 

@@ -22,9 +22,9 @@ static void *thread_calc(void *arg);
  */
 struct _thread_data
 {
-    unsigned int *data_in;      /// in 메모리의 시작 위치
-    unsigned int *data_out;     /// out 메모리의 시작 위치
-    int size;                   /// 계산할 pixels의 길이
+    const unsigned int *data_in;    /// in 메모리의 시작 위치
+    unsigned char *data_out;        /// out 메모리의 시작 위치
+    int size;                       /// 계산할 pixels의 길이
 };
 
 
@@ -36,12 +36,12 @@ struct _thread_data
  * @param size 계산하고자 하는 픽셀 길이 (메모리는 4배)
  * @param thread_cnt 스레드 갯수
  */
-void argb8888_to_gray_neon_thread(void *in_pixels, void *out_pixels, int size, int thread_cnt)
+void argb8888_to_gray_neon_thread(const void *in_pixels, void *out_pixels, int size, int thread_cnt)
 {
     int i;
 
-    unsigned int *in_start_ptr = (unsigned int *)in_pixels;
-    unsigned int *out_start_ptr = (unsigned int *)out_pixels;
+    const unsigned int *in_start_ptr = (const unsigned int *)in_pixels;
+    unsigned char *out_start_ptr = (unsigned char *)out_pixels;
     int chunk_size = size / thread_cnt;
     chunk_size -= chunk_size % (CACHE_LINE_SIZE / 4);
 
@@ -88,11 +88,8 @@ static void *thread_calc(void *arg)
     int n = data->size / 8;
     int m = data->size % 8;
 
-    int iTemp;
-    unsigned char szTemp[8];
-
-    unsigned int *data_in  = data->data_in;
-    unsigned int *data_out = data->data_out;
+    const unsigned int *data_in  = data->data_in;
+    unsigned char *data_out = data->data_out;
 
     // 한 루프당 8픽셀씩 변환 (32 bytes)
     while (n--) {
@@ -105,16 +102,10 @@ static void *thread_calc(void *arg)
         temp = vmlal_u8(temp, rgb.val[2], rfac);
 
         result = vshrn_n_u16 (temp, 8);
-        vst1_u8(szTemp, result);
+        vst1_u8(data_out, result);
 
-        iTemp = szTemp[0]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[1]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[2]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[3]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[4]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[5]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[6]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
-        iTemp = szTemp[7]; *data_out = iTemp | (iTemp << 8) | (iTemp << 16) | (*data_in & 0xff000000); data_in++; data_out++;
+        data_in += 8;
+        data_out += 8;
     }
 
     if (m) {

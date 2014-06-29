@@ -6,19 +6,19 @@
  * @warning  make 명령을 수행하면 이 파일은 컴파일하지 않음
  */
 
+#include <time.h>
+#include <stdlib.h>
 #include <android/log.h>
 #include <android/bitmap.h>
 #include "Rs-jni.h"
 #include "Allocation.h"
+#include "Common.h"
+#include "algorithm/Gray_To_Argb8888.h"
 #include "algorithm/Argb8888_To_Gray.h"
 #include "algorithm/Argb8888_To_Gray_Neon.h"
 #include "algorithm/Argb8888_To_Gray_Thread.h"
 #include "algorithm/Argb8888_To_Gray_Neon_Thread.h"
 #include "algorithm/Argb8888_To_Gray_Neon_Thread_Direct.h"
-
-
-#define  LOG_TAG    "test"
-#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
 
 
@@ -125,7 +125,14 @@ void Java_kr_pe_cnagune_renderscripttest_RsJNI_CopyFromOut
 void Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdk
     (JNIEnv *env, jobject thiz, jint size)
 {
-    argb8888_to_gray(get_in_memory(), get_out_memory(), size);
+    clock_t s, e;
+    unsigned char *buffer = (unsigned char *)malloc(sizeof (unsigned char) * size);
+    s = clock();
+    argb8888_to_gray(get_in_memory(), buffer, size);
+    e = clock();
+    gray_to_argb8888(buffer, get_out_memory(), size);
+    free(buffer);
+    LOGD("CalcNdk(): %fms", (float)(e - s) / CLOCKS_PER_SEC * 1000);
 }
 
 
@@ -139,7 +146,14 @@ void Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdk
 void Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdkNeon
     (JNIEnv *env, jobject thiz, jint size)
 {
-    argb8888_to_gray_neon(get_in_memory(), get_out_memory(), size);
+    clock_t s, e;
+    unsigned char *buffer = (unsigned char *)malloc(sizeof (unsigned char) * size);
+    s = clock();
+    argb8888_to_gray_neon(get_in_memory(), buffer, size);
+    e = clock();
+    gray_to_argb8888(buffer, get_out_memory(), size);
+    free(buffer);
+    LOGD("CalcNdkNeon(): %fms", (float)(e - s) / CLOCKS_PER_SEC * 1000);
 }
 
 
@@ -154,7 +168,14 @@ void Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdkNeon
 void Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdkThread
     (JNIEnv *env, jobject thiz, jint size, jint thread_cnt)
 {
-    argb8888_to_gray_thread(get_in_memory(), get_out_memory(), size, thread_cnt);
+    clock_t s, e;
+    unsigned char *buffer = (unsigned char *)malloc(sizeof (unsigned char) * size);
+    s = clock();
+    argb8888_to_gray_thread(get_in_memory(), buffer, size, thread_cnt);
+    e = clock();
+    gray_to_argb8888(buffer, get_out_memory(), size);
+    free(buffer);
+    LOGD("CalcNdkThread(%d): %fms", thread_cnt, (float)(e - s) / CLOCKS_PER_SEC * 1000);
 }
 
 
@@ -169,7 +190,14 @@ void Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdkThread
 void Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdkNeonThread
     (JNIEnv *env, jobject thiz, jint size, jint thread_cnt)
 {
-    argb8888_to_gray_neon_thread(get_in_memory(), get_out_memory(), size, thread_cnt);
+    clock_t s, e;
+    unsigned char *buffer = (unsigned char *)malloc(sizeof (unsigned char) * size);
+    s = clock();
+    argb8888_to_gray_neon_thread(get_in_memory(), buffer, size, thread_cnt);
+    e = clock();
+    gray_to_argb8888(buffer, get_out_memory(), size);
+    free(buffer);
+    LOGD("CalcNdkNeonThread(%d): %fms", thread_cnt, (float)(e - s) / CLOCKS_PER_SEC * 1000);
 }
 
 
@@ -186,9 +214,11 @@ void Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdkNeonThreadDirect
     (JNIEnv *env, jobject thiz, jobject in_bitmap, jobject out_bitmap, jint thread_cnt)
 {
     AndroidBitmapInfo in_info, out_info;
+    unsigned char *buffer;
     void *in_pixels, *out_pixels;
+    int size;
     int ret;
-
+    clock_t s, e;
 
     // 1. in_bitmap 유효성 검사
     if ((ret = AndroidBitmap_getInfo(env, in_bitmap, &in_info)) < 0) {
@@ -229,11 +259,19 @@ void Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdkNeonThreadDirect
     }
 
     // 5. 변환 작업 수행
-    argb8888_to_gray_neon_thread_direct(in_pixels, out_pixels, in_info.width * in_info.height, thread_cnt);
+    size = in_info.width * in_info.height;
+    buffer = (unsigned char *)malloc(sizeof (unsigned char) * size);
+    s = clock();
+    argb8888_to_gray_neon_thread_direct(in_pixels, buffer, size, thread_cnt);
+    e = clock();
+    gray_to_argb8888(buffer, out_pixels, size);
+    free(buffer);
 
     // 6. bitmap 락 해제
     AndroidBitmap_unlockPixels(env, in_bitmap);
     AndroidBitmap_unlockPixels(env, out_bitmap);
+
+    LOGD("CalcNdkNeonThreadDirect(%d): %fms", thread_cnt, (float)(e - s) / CLOCKS_PER_SEC * 1000);
 }
 
 

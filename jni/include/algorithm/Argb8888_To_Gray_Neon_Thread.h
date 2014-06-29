@@ -14,7 +14,7 @@ extern "C" {
 
 
 /// Grayscale 변환 함수 - NEON 명령어와 Thread 사용
-void argb8888_to_gray_neon_thread(void *in_pixels, void *out_pixels, int size, int thread_cnt);
+void argb8888_to_gray_neon_thread(const void *in_pixels, void *out_pixels, int size, int thread_cnt);
 
 
 #ifdef __cplusplus 

@@ -18,9 +18,9 @@ static void *thread_calc(void *arg);
  */
 struct _thread_data
 {
-    unsigned char *data_in;     /// in 메모리의 시작 위치
-    unsigned char *data_out;    /// out 메모리의 시작 위치
-    int size;                   /// 계산할 pixels의 길이
+    const unsigned char *data_in;   /// in 메모리의 시작 위치
+    unsigned char *data_out;        /// out 메모리의 시작 위치
+    int size;                       /// 계산할 pixels의 길이
 };
 
 
@@ -32,11 +32,11 @@ struct _thread_data
  * @param size 계산하고자 하는 픽셀 길이 (메모리는 4배)
  * @param thread_cnt 스레드 갯수
  */
-void argb8888_to_gray_thread(void *in_pixels, void *out_pixels, int size, int thread_cnt)
+void argb8888_to_gray_thread(const void *in_pixels, void *out_pixels, int size, int thread_cnt)
 {
     int i;
 
-    unsigned char *in_start_ptr = (unsigned char *)in_pixels;
+    const unsigned char *in_start_ptr = (const unsigned char *)in_pixels;
     unsigned char *out_start_ptr = (unsigned char *)out_pixels;
     int chunk_size = size / thread_cnt;
     chunk_size -= chunk_size % (CACHE_LINE_SIZE / 4);
@@ -51,7 +51,7 @@ void argb8888_to_gray_thread(void *in_pixels, void *out_pixels, int size, int th
         thread_data[i].size = chunk_size;
 
         in_start_ptr  += chunk_size * 4;
-        out_start_ptr += chunk_size * 4;
+        out_start_ptr += chunk_size;
     }
     thread_data[thread_cnt - 1].data_in  = in_start_ptr;
     thread_data[thread_cnt - 1].data_out = out_start_ptr;
@@ -80,10 +80,10 @@ static void *thread_calc(void *arg)
 
     while (data.size-- > 0) {
         // 할당 (little-endian)
-        int b = *data.data_in++; // 0xBB
-        int g = *data.data_in++; // 0xGG
-        int r = *data.data_in++; // 0xRR
-        int c = *data.data_in++; // 0xAA
+        int b = *data.data_in++;// 0xBB
+        int g = *data.data_in++;// 0xGG
+        int r = *data.data_in++;// 0xRR
+        data.data_in++;         // 0xAA
 
         // 게산
         r *= 76; 
@@ -93,9 +93,6 @@ static void *thread_calc(void *arg)
 
         // 저장
         *data.data_out++ = y;
-        *data.data_out++ = y;
-        *data.data_out++ = y;
-        *data.data_out++ = c;
     }
 
     return NULL;

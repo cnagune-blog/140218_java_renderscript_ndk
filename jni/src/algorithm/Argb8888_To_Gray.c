@@ -16,11 +16,11 @@
  * @param out_pixels 결과 이미지를 저장할 배열
  * @param size 계산하고자 하는 픽셀 길이 (메모리는 4배)
  */
-void argb8888_to_gray(void *in_pixels, void *out_pixels, int size)
+void argb8888_to_gray(const void *in_pixels, void *out_pixels, int size)
 {
     int i;
 
-    unsigned char *data_in  = (unsigned char *)in_pixels;
+    const unsigned char *data_in  = (const unsigned char *)in_pixels;
     unsigned char *data_out = (unsigned char *)out_pixels;
 
     for (i = 0; i < size; i++) {
@@ -28,7 +28,7 @@ void argb8888_to_gray(void *in_pixels, void *out_pixels, int size)
         int b = *data_in++; // 0xAARRGGBB
         int g = *data_in++; // 0xRR
         int r = *data_in++; // 0xGG
-        int c = *data_in++; // 0xBB
+        data_in++;
 
         // 게산
         r *= 76; 
@@ -38,9 +38,6 @@ void argb8888_to_gray(void *in_pixels, void *out_pixels, int size)
 
         // 저장
         *data_out++ = y;
-        *data_out++ = y;
-        *data_out++ = y;
-        *data_out++ = c;
     }
 }
 

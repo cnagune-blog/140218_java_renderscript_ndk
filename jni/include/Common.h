@@ -10,17 +10,17 @@
 
 #if defined(ANDROID) || defined(__ANDROID__)
 #include <android/log.h>
-#define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, "test", __VA_ARGS__) 
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG  , "test", __VA_ARGS__) 
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO   , "test", __VA_ARGS__) 
-#define LOGW(...) __android_log_print(ANDROID_LOG_WARN   , "test", __VA_ARGS__) 
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR  , "test", __VA_ARGS__) 
+#define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, "cnagune", __VA_ARGS__) 
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG  , "cnagune", __VA_ARGS__) 
+#define LOGI(...) __android_log_print(ANDROID_LOG_INFO   , "cnagune", __VA_ARGS__) 
+#define LOGW(...) __android_log_print(ANDROID_LOG_WARN   , "cnagune", __VA_ARGS__) 
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR  , "cnagune", __VA_ARGS__) 
 #else
-#define LOGV(...) printf("test LogV: ", __VA_ARGS__);
-#define LOGD(...) printf("test LogD: ", __VA_ARGS__);
-#define LOGI(...) printf("test LogI: ", __VA_ARGS__);
-#define LOGW(...) printf("test LogW: ", __VA_ARGS__);
-#define LOGE(...) printf("test LogE: ", __VA_ARGS__);
+#define LOGV(...) printf("cnagune LogV: ", __VA_ARGS__);
+#define LOGD(...) printf("cnagune LogD: ", __VA_ARGS__);
+#define LOGI(...) printf("cnagune LogI: ", __VA_ARGS__);
+#define LOGW(...) printf("cnagune LogW: ", __VA_ARGS__);
+#define LOGE(...) printf("cnagune LogE: ", __VA_ARGS__);
 #endif
 
 

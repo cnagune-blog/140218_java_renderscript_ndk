@@ -14,7 +14,7 @@ extern "C" {
 
 
 /// Grayscale 변환 함수 - NEON 명령어
-void argb8888_to_gray_neon(void *in_pixels, void *out_pixels, int size);
+void argb8888_to_gray_neon(const void *in_pixels, void *out_pixels, int size);
 
 
 #ifdef __cplusplus 

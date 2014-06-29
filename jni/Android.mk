@@ -10,6 +10,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
 LOCAL_MODULE    := Rs-jni
 LOCAL_SRC_FILES := src/Rs-jni.c \
                    src/Allocation.c \
+                   src/algorithm/Gray_To_Argb8888.c \
                    src/algorithm/Argb8888_To_Gray.c \
                    src/algorithm/Argb8888_To_Gray_Neon.c \
                    src/algorithm/Argb8888_To_Gray_Thread.c \

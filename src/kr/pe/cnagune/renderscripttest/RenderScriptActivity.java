@@ -82,15 +82,24 @@ public class RenderScriptActivity extends Activity
 			    for (int i = 0; i < LoopTime; i++) {
 				    for (ICalc calc : calcList) {
 					    long start = System.nanoTime();
-					    calc.run(bitmapIn);
+					    final Bitmap bitmap = calc.run(bitmapIn);
 					    long end = System.nanoTime();
 
 					    if (sumMap.containsKey(calc.name()) == false) {
-						    sumMap.put(calc.name(), 0l);
-					    }
-					    sumMap.put(calc.name(), sumMap.get(calc.name()) + (end - start));
+							sumMap.put(calc.name(), 0l);
+						}
+						sumMap.put(calc.name(), sumMap.get(calc.name()) + (end - start));
 
-					    Log.d(TAG, String.format("Time) %-20s: %d", calc.name(), (end - start)));
+						if (calc instanceof CalcNdkNeonThreadDirect) {
+							RenderScriptActivity.this.runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									image.setImageBitmap(Bitmap.createScaledBitmap(bitmap, ScaleImageViewWidth, ScaleImageViewHeight, true));
+								}
+							});
+						}
+
+						Log.d(TAG, String.format("Time) %-20s: %d", calc.name(), (end - start)));
 				    }
 			    }
 
