@@ -3,10 +3,10 @@ include Makefile.common
 ###########################################################
 # Rules
 ###########################################################
-all: dir_check
+all:
 	make -C src all
 
-clean: test.clean
+clean:
 	make -C src clean
 
 check: test

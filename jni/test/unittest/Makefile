@@ -35,11 +35,14 @@ CMAKE_COMMAND = /usr/bin/cmake
 # The command to remove a file.
 RM = /usr/bin/cmake -E remove -f
 
+# Escaping for special characters.
+EQUALS = =
+
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cnagune/home_svn/RenderScriptTest/jni/test/unittest
+CMAKE_SOURCE_DIR = /home/cnagune/home_github/140218_java_renderscript_ndk/jni/test/unittest
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cnagune/home_svn/RenderScriptTest/jni/test/unittest
+CMAKE_BINARY_DIR = /home/cnagune/home_github/140218_java_renderscript_ndk/jni/test/unittest
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -66,9 +69,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/cnagune/home_svn/RenderScriptTest/jni/test/unittest/CMakeFiles /home/cnagune/home_svn/RenderScriptTest/jni/test/unittest/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cnagune/home_github/140218_java_renderscript_ndk/jni/test/unittest/CMakeFiles /home/cnagune/home_github/140218_java_renderscript_ndk/jni/test/unittest/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/cnagune/home_svn/RenderScriptTest/jni/test/unittest/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cnagune/home_github/140218_java_renderscript_ndk/jni/test/unittest/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
