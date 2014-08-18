@@ -18,60 +18,28 @@ extern "C" {
 
 
 /*********************************************************
- * 메모리 초기화 관련 함수에 대한 인터페이스
- *********************************************************/
-
-
-
-/*********************************************************
- * 메모리 관련 함수에 대한 인터페이스
- *********************************************************/
-
-/// in 메모리 할당 및 pixels 배열 복사 (size * 4)
-JNIEXPORT void JNICALL
-    Java_kr_pe_cnagune_renderscripttest_RsJNI_CopyToIn
-    (JNIEnv *env, jobject thiz, jobject bitmap);
-
-/// out 메모리 할당 (size * 4)
-JNIEXPORT void JNICALL
-    Java_kr_pe_cnagune_renderscripttest_RsJNI_CreateMemoryToOut
-    (JNIEnv *env, jobject thiz, jint size);
-
-/// out 메모리의 내용을 pixels 배열로 복사 (size * 4)
-JNIEXPORT void JNICALL
-    Java_kr_pe_cnagune_renderscripttest_RsJNI_CopyFromOut
-    (JNIEnv *env, jobject thiz, jobject bitmap);
-
-
-/*********************************************************
  * 계산 관련된 함수에 대한 인터페이스
  *********************************************************/
 
-/// Grayscale 변환 함수 - 일반 명령어 사용
+/// Grayscale 변환 함수 - 일반 명령어 사용, bitmap 직접 제어
 JNIEXPORT void JNICALL
     Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdk
-    (JNIEnv *env, jobject thiz, jint size);
+    (JNIEnv *env, jobject thiz, jobject in_bitmap, jobject out_bitmap);
 
-/// Grayscale 변환 함수 - NEON 명령어 사용
+/// Grayscale 변환 함수 - NEON 명령어 사용, bitmap 직접 제어
 JNIEXPORT void JNICALL
     Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdkNeon
-    (JNIEnv *env, jobject thiz, jint size);
+    (JNIEnv *env, jobject thiz, jobject in_bitmap, jobject out_bitmap);
 
-/// Grayscale 변환 함수 - 일반 명령어와 Thread 사용
+/// Grayscale 변환 함수 - 일반 명령어와 Thread 사용, bitmap 직접 제어
 JNIEXPORT void JNICALL
     Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdkThread
-    (JNIEnv *env, jobject thiz, jint size, jint thread_cnt);
-
-/// Grayscale 변환 함수 - NEON 명령어와 Thread 사용
-JNIEXPORT void JNICALL
-    Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdkNeonThread
-    (JNIEnv *env, jobject thiz, jint size, jint thread_cnt);
+    (JNIEnv *env, jobject thiz, jobject in_bitmap, jobject out_bitmap, jint thread_cnt);
 
 /// Grayscale 변환 함수 - NEON 명령어와 Thread 사용, bitmap 직접 제어
 JNIEXPORT void JNICALL
-    Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdkNeonThreadDirect
+    Java_kr_pe_cnagune_renderscripttest_RsJNI_CalcNdkNeonThread
     (JNIEnv *env, jobject thiz, jobject in_bitmap, jobject out_bitmap, jint thread_cnt);
-
 
 #ifdef __cplusplus
 }

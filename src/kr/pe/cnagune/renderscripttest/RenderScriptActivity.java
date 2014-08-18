@@ -17,7 +17,6 @@ import kr.pe.cnagune.renderscripttest.algorithm.CalcJava;
 import kr.pe.cnagune.renderscripttest.algorithm.CalcNdk;
 import kr.pe.cnagune.renderscripttest.algorithm.CalcNdkNeon;
 import kr.pe.cnagune.renderscripttest.algorithm.CalcNdkNeonThread;
-import kr.pe.cnagune.renderscripttest.algorithm.CalcNdkNeonThreadDirect;
 import kr.pe.cnagune.renderscripttest.algorithm.CalcNdkThread;
 import kr.pe.cnagune.renderscripttest.algorithm.CalcRenderScript;
 import kr.pe.cnagune.renderscripttest.algorithm.ICalc;
@@ -28,7 +27,7 @@ public class RenderScriptActivity extends Activity
 	private static final String TAG = "RenderScriptActivity";
 	private static final int ScaleImageViewWidth     = 320;
 	private static final int ScaleImageViewHeight    = 240;
-	private static final int LoopTime = 5;
+	private static final int LoopTime = 1;
 
 	private ImageView image;
 	private TextView result;
@@ -66,9 +65,6 @@ public class RenderScriptActivity extends Activity
 			    calcList.add(new CalcNdkNeonThread(2));
 			    calcList.add(new CalcNdkNeonThread(4));
 			    calcList.add(new CalcNdkNeonThread(8));
-			    calcList.add(new CalcNdkNeonThreadDirect(2));
-			    calcList.add(new CalcNdkNeonThreadDirect(4));
-			    calcList.add(new CalcNdkNeonThreadDirect(8));
 
 			    // 2. calcList 목록에 있는 테스트 1번씩 수행 (jit 관련 최적화 때문)
 			    for (ICalc calc : calcList) {
@@ -109,8 +105,6 @@ public class RenderScriptActivity extends Activity
 		    }
 	    }).start();
     }
-
-
 }
 
 

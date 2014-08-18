@@ -16,13 +16,10 @@ public class CalcNdkNeon implements ICalc {
 
 	@Override
 	public Bitmap run(Bitmap bitmapIn) {
-		int width = bitmapIn.getWidth();
-		int height = bitmapIn.getHeight();
-		Bitmap bitmap = Bitmap.createBitmap(width, height, bitmapIn.getConfig());
-		RsJNI.CopyToIn(bitmapIn);
-		RsJNI.CreateMemoryToOut(width * height);
-		RsJNI.CalcNdkNeon(width * height);
-		RsJNI.CopyFromOut(bitmap);
-		return bitmap;
+        int width = bitmapIn.getWidth();
+        int height = bitmapIn.getHeight();
+        Bitmap bitmapOut = Bitmap.createBitmap(width, height, bitmapIn.getConfig());
+        RsJNI.CalcNdkNeon(bitmapIn, bitmapOut);
+        return bitmapOut;
 	}
 }

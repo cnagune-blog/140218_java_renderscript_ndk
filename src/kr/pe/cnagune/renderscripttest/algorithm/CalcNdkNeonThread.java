@@ -22,13 +22,10 @@ public class CalcNdkNeonThread implements ICalc {
 
 	@Override
 	public Bitmap run(Bitmap bitmapIn) {
-		int width = bitmapIn.getWidth();
-		int height = bitmapIn.getHeight();
-		Bitmap bitmap = Bitmap.createBitmap(width, height, bitmapIn.getConfig());
-		RsJNI.CopyToIn(bitmapIn);
-		RsJNI.CreateMemoryToOut(width * height);
-		RsJNI.CalcNdkNeonThread(width * height, threadNum);
-		RsJNI.CopyFromOut(bitmap);
-		return bitmap;
+        int width = bitmapIn.getWidth();
+        int height = bitmapIn.getHeight();
+        Bitmap bitmapOut = Bitmap.createBitmap(width, height, bitmapIn.getConfig());
+        RsJNI.CalcNdkNeonThread(bitmapIn, bitmapOut, threadNum);
+        return bitmapOut;
 	}
 }
