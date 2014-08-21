@@ -28,4 +28,5 @@ cmake .
 make clean
 make
 make test
+#valgrind ./runTests 
 
